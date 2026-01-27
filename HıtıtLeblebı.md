@@ -12,7 +12,7 @@ Bu proje; sıradan bir esnaf dükkanının (KOBİ), adım adım **Enterprise (Ku
 **Çözüm:** Layer 2 seviyesinde VLAN izolasyonu uygulandı.
 
 ### 🗺️ Ağ Topolojisi
-![Faz 1 Topolojisi](faz1-topology.png)
+![Faz 1 Topolojisi](CorumTopoloji.png)
 *(Görsel: Çorum Merkez Dükkan - VLAN Ayrımı)*
 
 ### 🔧 Teknik Detaylar

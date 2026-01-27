@@ -31,11 +31,31 @@ Bu proje; sıradan bir esnaf dükkanının (KOBİ), adım adım **Enterprise (Ku
 * **Banner MOTD:** Yasal uyarı ve loglama bilgilendirmesi giriş ekranına eklendi.
 
 ### 📸 Sistem Kanıtları (Screenshots)
-* **VLAN Segmentation:** Departmanların trafiğini izole etmek için.
+### 📸 Sistem Kanıtları (Screenshots)
+
+**1. VLAN Yapılandırması (VLAN Brief):**
+Dükkan (10) ve Misafir (20) VLAN'larının oluşturulduğu görülmektedir.
+![VLAN Brief](ShVLanBrief.png)
+
+**2. Trunk & Access Portlar:**
+Hangi portun hangi modda olduğu doğrulanmıştır.
+![Trunk Portlar](ShowTrunkPort.png)
+
+**3. Ping Testi (VLAN 10 <-> VLAN 20):**
+Departmanlar arası erişim test edilmiştir.
+![Ping Testi](Vlan10Vlan20Ping.png)
+
+**4. SSH Bağlantı Kanıtı:**
+Router'a uzaktan güvenli erişim sağlanmıştır.
+![SSH Baglantisi](SshBaglanti.png)
+![Switch SSH](SwSSH.png)
+
+**5. Güvenlik (Encryption & SVI):**
+Şifreleme servisleri ve Yönetim IP'si (SVI) kontrolü.
+![Sifreleme](SwEncyrption.png)
+![SVI Durumu](SwSVL.png)
 
 
 
 
-
-* **Access & Trunk Ports:** Cihaz ve Switchler arası bağlantı.
 

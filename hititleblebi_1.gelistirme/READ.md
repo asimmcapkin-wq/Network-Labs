@@ -52,7 +52,10 @@ interface Ethernet0/0
  switchport trunk encapsulation dot1q
  switchport mode trunk
 ``` 
+### 🖥️ VLAN Doğrulama Testi
+Aşağıdaki görselde, VLAN yapılandırmasının başarılı bir şekilde çalıştığı ve switch üzerindeki port atamaları görülmektedir:
 
+![VLAN Kanıtı](assets/vlankanıt.png)
 
 
 

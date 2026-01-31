@@ -110,3 +110,123 @@ Aşağıdaki görselde, VLAN yapılandırmasının başarılı bir şekilde çal
 
 ![VLAN Kanıtı](assets/faz1.2vlanlar.png)
 ![VLAN Kanıtı](assets/faz1.2vlanr2.png)
+
+# 🏺 Faz 2: Ağ Geçidi ve Servis Erişimi (Router R2)
+
+## 🛠️ Router (R2) - Tam Kodlar (Web Sunucu & IoT Dahil)
+
+Bu kod bloğunda; Yönetim, Misafir, Web Sunucu (VLAN 40) ve IoT ağlarının tamamı tanımlanmıştır. Ayrıca IoT koruması ve genel internet çıkışı aktiftir.
+
+```bash
+
+! --- 1. INTER-VLAN ve NAT ARAYÜZ AYARLARI ---
+
+! Yönetim Ağı (VLAN 10)
+interface Ethernet0/0.10
+ description YONETIM_AGI
+ encapsulation dot1q 10
+ ip address 192.168.10.1 255.255.255.0
+ ip nat inside
+!
+! Misafir Ağı (VLAN 20)
+interface Ethernet0/0.20
+ description MISAFIR_AGI
+ encapsulation dot1q 20
+ ip address 192.168.20.1 255.255.255.0
+ ip nat inside
+ ip access-group IOT_KORUMA in  ! Misafirler buradan girerken denetlenir
+!
+! Kurumsal Web Sunucusu (VLAN 40) - EKLENDİ ✅
+interface Ethernet0/0.40
+ description WEB_SERVER_KURUMSAL
+ encapsulation dot1q 40
+ ip address 192.168.40.1 255.255.255.0
+ ip nat inside        ! Sunucunun internete çıkması/güncelleme alması için
+!
+! IoT Sensör Ağı (VLAN 50)
+interface Ethernet0/0.50
+ description IOT_SENSOR_AGI
+ encapsulation dot1q 50
+ ip address 192.168.50.1 255.255.255.0
+ ip nat inside
+!
+! WAN (İnternet) Çıkışı
+interface Ethernet0/1
+ description WAN_INTERNET
+ ip address dhcp
+ ip nat outside
+!
+
+! --- 2. ACL: IOT KORUMA DUVARI ---
+! Senaryo: IoT ağına (50.0) sadece Yönetim (10.0) erişsin.
+! Misafir (20.0) veya Web Server (40.0) IoT'ye erişemesin.
+
+ip access-list extended IOT_KORUMA
+ ! Misafir Ağı -> IoT Ağına Giremesin (YASAK)
+ 10 deny ip 192.168.20.0 0.0.0.255 192.168.50.0 0.0.0.255
+ ! Web Server -> IoT Ağına Giremesin (YASAK - Opsiyonel Güvenlik)
+ 20 deny ip 192.168.40.0 0.0.0.255 192.168.50.0 0.0.0.255
+ ! Geri kalan tüm internet ve sunucu trafiğine izin ver
+ 30 permit ip any any
+
+! --- 3. NAT AYARLARI (Tüm Ağlar İçin) ---
+! 192.168.0.0/16 diyerek 10, 20, 40 ve 50 bloklarının hepsini kapsadık.
+
+access-list 1 permit 192.168.0.0 0.0.255.255
+ip nat inside source list 1 interface Ethernet0/1 overload
+
+```
+💡 Neleri Güncelledik?
+
+   interface Ethernet0/0.40 Eklendi: Web sunucun artık Router üzerinden 192.168.40.1 kapısını kullanarak diğer ağlarla konuşabilir ve internete çıkabilir.
+
+   NAT Kapsamı: access-list 1 içinde 192.168.0.0 0.0.255.255 kullandığımız için, eklediğimiz VLAN 40 (192.168.40.x) otomatik olarak internete çıkış yetkisine sahip oldu. Ekstra bir NAT satırı yazmana gerek kalmadı.
+
+## 🛠️ Merkez Switch (CorumSw) Yapılandırması
+
+```bash
+! --- 1. VLAN VERİTABANI OLUŞTURMA ---
+! Tüm VLAN'ların burada tanımlı olması ŞART. 
+! Yoksa switch, tanımadığı etikete sahip paketi çöpe atar.
+
+vlan 10
+ name YONETIM
+vlan 20
+ name MISAFIR
+vlan 40
+ name SERVER_WEB    ! Unutmadık :)
+vlan 50
+ name SENSOR_IOT
+
+! --- 2. TRUNK PORTLARI (Bağlantı Noktaları) ---
+
+! Router'a (R2) Giden Hat (Yukarı)
+interface Ethernet0/0
+ description TRUNK_TO_ROUTER_R2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ ! Router, tüm VLAN'ların ağ geçidi olduğu için hepsi buradan geçer.
+
+! Sol Taraftaki Switch'e (Vlan10_20_30) Giden Hat
+interface Ethernet0/1
+ description TRUNK_TO_LEFT_SW
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ ! Buradan VLAN 10 ve 20 trafiği gelir.
+
+! Sağ Taraftaki Switch'e (Vlan40_50) Giden Hat
+interface Ethernet0/2
+ description TRUNK_TO_RIGHT_SW
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ ! Burası kritik: Web Server (40) ve IoT (50) trafiği buradan gelir.
+```
+ Neden Access Port Yok?: CorumSw bir "Core/Distribution" katmanı cihazıdır. Görevi PC'leri bağlamak değil, PC'lerin bağlı olduğu switchleri toplayıp Router'a iletmektir.
+ VLAN 40 Detayı: Eğer vlan 40 komutunu bu switch'e girmezsen, sağ taraftaki sunucudan gelen paketler buraya ulaştığında "Ben 40 numarasını tanımıyorum" diyerek engellenir. Bu yüzden veritabanı tanımı çok kritiktir.
+
+ şağıdaki görselde, VLAN yapılandırmasının başarılı bir şekilde çalıştığı ve switch üzerindeki port atamaları görülmektedir:
+
+![VLAN Kanıtı](assets/faz1.2vlanlar.png)
+![VLAN Kanıtı](assets/faz1.2vlanr2.png)
+
+ 

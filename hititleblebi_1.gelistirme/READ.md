@@ -9,7 +9,6 @@ Ağdaki departmanlar, `sh vlan` çıktısına uygun olarak aşağıdaki gibi izo
 
 * **VLAN 10**: YONETIM
 * **VLAN 20**: MISAFIR
-* **VLAN 30**: CIHAZLAR
  ```bash 
 vlan 10
  name YONETIM

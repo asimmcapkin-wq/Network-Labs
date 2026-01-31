@@ -57,4 +57,56 @@ Aşağıdaki görselde, VLAN yapılandırmasının başarılı bir şekilde çal
 ![VLAN Kanıtı](assets/vlankanıt.png)
 
 
+# Faz 1.2: Sunucu ve IoT Bölgesi Yapılandırması
 
+Ağın sağ tarafında, kurumsal web sunucusu ve IoT sensörlerinin yönetimini sağlayan **Vlan40_50** switch'inin yapılandırması tamamlanmıştır.
+* **VLAN 40**: SERVER_WEB (Kurumsal Sunucu)
+* **VLAN 50**: SENSOR_IOT (Üretim Hattı Sensörleri)
+
+```bash
+vlan 40
+ name SERVER_WEB
+
+
+vlan 50
+ name SENSOR_IOT
+```
+## 2. Port Atamaları (Access Ports)
+
+Cihazların ilgili sunucu ağlarına dahil edilmesi için yapılan yapılandırmalar:
+
+   Web Sunucusu (VLAN 40): Linux tabanlı kurumsal sunucu bu port üzerinden hizmet verir.
+
+   IoT Sensör Bloğu (VLAN 50): Üretim hattındaki farklı sensör ve kontrol cihazlarını kapsar.
+
+
+```bash
+   ! Kurumsal Web Sunucusu (VLAN 40)
+interface Ethernet0/1
+ switchport mode access
+ switchport access vlan 40
+ description WEB_SERVER_PORT
+
+! IoT Sensörleri ve Kontrolörler (VLAN 50)
+interface range Ethernet0/2 - 3, Ethernet1/0
+ switchport mode access
+ switchport access vlan 50
+ description IOT_SENSORS_BLOCK
+ ```
+## 3. Trunk Port Yapılandırması 🚀
+
+Bu switch'in ana omurga (CorumSw) ile haberleşmesini sağlayan Trunk hattı:
+```bash
+
+interface Ethernet0/0
+ description TRUNK_TO_CORUM_SW
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+```
+---
+
+### 🖥️ VLAN Doğrulama Testi
+Aşağıdaki görselde, VLAN yapılandırmasının başarılı bir şekilde çalıştığı ve switch üzerindeki port atamaları görülmektedir:
+
+![VLAN Kanıtı](assets/faz1.2vlanlar.png)
+![VLAN Kanıtı](assets/faz1.2vlanlar2.png)

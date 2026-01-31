@@ -224,9 +224,12 @@ interface Ethernet0/2
  Neden Access Port Yok?: CorumSw bir "Core/Distribution" katmanı cihazıdır. Görevi PC'leri bağlamak değil, PC'lerin bağlı olduğu switchleri toplayıp Router'a iletmektir.
  VLAN 40 Detayı: Eğer vlan 40 komutunu bu switch'e girmezsen, sağ taraftaki sunucudan gelen paketler buraya ulaştığında "Ben 40 numarasını tanımıyorum" diyerek engellenir. Bu yüzden veritabanı tanımı çok kritiktir.
 
- şağıdaki görselde, VLAN yapılandırmasının başarılı bir şekilde çalıştığı ve switch üzerindeki port atamaları görülmektedir:
+ Aşağıdaki görselde, Web Sitesi Erişimi ve Vlanın Yasaklı Siteye Erişimi; 
+![YONETIMERISIM Kanıtı](assets/müdürerişimıot.png)
+![VLAN20ERIŞIM Kanıtı](assets/misafirerişimıot.png)
+![VLAN20YASAK Kanıtı](assets/vlan20ıotyasak.png)
+![WEB Kanıtı](assets/websitesi.png)
 
-![VLAN Kanıtı](assets/faz1.2vlanlar.png)
-![VLAN Kanıtı](assets/faz1.2vlanr2.png)
+ 
 
  

@@ -109,4 +109,4 @@ interface Ethernet0/0
 Aşağıdaki görselde, VLAN yapılandırmasının başarılı bir şekilde çalıştığı ve switch üzerindeki port atamaları görülmektedir:
 
 ![VLAN Kanıtı](assets/faz1.2vlanlar.png)
-![VLAN Kanıtı](assets/faz1.2vlanlar2.png)
+![VLAN Kanıtı](assets/faz1.2vlanr2.png)

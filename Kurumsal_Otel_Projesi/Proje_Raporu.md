@@ -26,5 +26,36 @@ Bu proje, gerçek dünya senaryolarına uygun olarak; yüksek erişilebilirlik, 
 - **Failover Testi:** Router'ın bir kablosu koptuğunda ping kesintisi > **YOK (BAŞARILI)**
 - **SSH Testi:** Admin PC'den switch yönetimi > **BAŞARILI**
 
+
+## 📸 Test ve Doğrulama Kanıtları (Screenshots)
+
+Ağın beklenen şekilde çalıştığı, güvenlik kurallarının (ACL) aktif olduğu ve yedekliliğin sağlandığı aşağıdaki testlerle doğrulanmıştır.
+
+### 1. Ağ Topolojisi (Genel Bakış)
+Kurulan ağın genel yapısı, VLAN dağılımı ve yedekli hatlar.
+![Topoloji](assets/TOPOLOJIYENI.png)
+
+### 2. VLAN ve IP Yapılandırması
+Cihazların ilgili VLAN'larda olduğu ve IP aldıkları doğrulanmıştır.
+![VLAN Kanıtı](assets/vlankanıt.png)
+
+### 3. Web/İnternet Erişim Testi
+Kullanıcıların internete (Web Sunucusuna) erişebildiği test edilmiştir.
+![Web Testi](assets/websitesie.png)
+
+### 4. ACL Güvenlik Testi (Yasaklı Erişim)
+Misafir veya yetkisiz cihazların, korunan ağlara (VLAN 20/IoT) erişimi **Engellenmiştir**.
+*(Kanıt: "Request timed out" veya "Destination host unreachable")*
+![ACL Engelleme](assets/vlan20iotyasak.png)
+
+### 5. Yönlendirme Testi (Traceroute)
+Paketlerin doğru rotayı izleyerek hedefe ulaştığını gösteren yol haritası.
+![TraceRoute Testi](assets/tracert_testi.png)
+
+### 6. Uzaktan Yönetim (SSH)
+Yönetim cihazlarına sadece yetkili VLAN'dan güvenli (SSH) erişim sağlanmaktadır.
+![SSH Erişimi](assets/ssh_erisimi.png)
+
 ---
 *Proje Sahibi: Asım Murat Çapkın
+

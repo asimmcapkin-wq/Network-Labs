@@ -1,0 +1,69 @@
+! ---------------------------------------------------------
+! HOSTNAME: Router1 (Edge Gateway)
+! ROLLER: NAT, WAN Gateway, Static Routing (Load Balance)
+! ---------------------------------------------------------
+
+version 15.1
+service password-encryption
+hostname Router1
+!
+ip domain-name otel.local
+crypto key generate rsa general-keys modulus 1024
+ip ssh version 2
+username admin privilege 15 secret cisco123
+!
+! LAN ARAYUZLERI (Core Switch ile Yedekli Baglanti)
+! Ana Kat Switch'in 10.0.0.2 ve 10.0.0.6 bacaklarinin karsiliklari.
+!
+interface GigabitEthernet0/0
+ description --- LAN LINK 1 (PRIMARY) ---
+ ip address 10.0.0.1 255.255.255.252
+ ip nat inside
+ duplex auto
+ speed auto
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description --- LAN LINK 2 (LOAD BALANCE) ---
+ ip address 10.0.0.5 255.255.255.252
+ ip nat inside
+ duplex auto
+ speed auto
+ no shutdown
+!
+! WAN ARAYUZU (ISP'ye Giden)
+!
+interface GigabitEthernet0/2
+ description --- WAN / ISP LINK ---
+ ! Ornek Public IP (Simulasyon)
+ ip address 209.165.200.225 255.255.255.252
+ ip nat outside
+ duplex auto
+ speed auto
+ no shutdown
+!
+! NAT AYARLARI (İnternet Erişimi İçin)
+!
+! 1. Hangi IP'lerin cikisina izin verilecek? (Tum 192.168.x.x blogu)
+access-list 1 permit 192.168.0.0 0.0.255.255
+!
+! 2. NAT Kurali (PAT - Port Address Translation)
+ip nat inside source list 1 interface GigabitEthernet0/2 overload
+!
+! ROUTING (Yönlendirme)
+!
+! 1. Geri Donus Rotalari (Iceri giden trafik)
+! Icerideki VLAN'lara ulasmak icin Core Switch'e yolla.
+! Iki bacak oldugu icin yuk dengelemesi (ECMP) yapilir.
+ip route 192.168.0.0 255.255.0.0 10.0.0.2
+ip route 192.168.0.0 255.255.0.0 10.0.0.6
+!
+! 2. Default Route (Disari giden trafik)
+! Bilmedigin her seyi ISP'ye (karsi tarafa) at.
+ip route 0.0.0.0 0.0.0.0 209.165.200.226
+!
+line vty 0 15
+ transport input ssh
+ login local
+!
+end

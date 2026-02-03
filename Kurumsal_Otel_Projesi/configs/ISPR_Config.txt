@@ -1,0 +1,27 @@
+! ---------------------------------------------------------
+! HOSTNAME: ISPR (Internet Service Provider)
+! NOT: Bu cihaz interneti simule eder.
+! ---------------------------------------------------------
+
+version 15.1
+hostname ISPR
+!
+! WAN Baglantisi (Musteriye/Otel'e giden)
+!
+interface GigabitEthernet0/0
+ description --- CONNECTION TO CUSTOMER (OTEL) ---
+ ip address 209.165.200.226 255.255.255.252
+ no shutdown
+!
+! Internet Simülasyonu (Google DNS vb.)
+!
+interface Loopback0
+ description --- INTERNET (Google DNS) ---
+ ip address 8.8.8.8 255.255.255.255
+ no shutdown
+!
+! Routing
+! Geri donus rotasina gerek yok cunku Otel Router NAT yapiyor.
+! Ancak ping testleri icin Router'in WAN IP'sini bilmeli.
+!
+end

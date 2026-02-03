@@ -1,0 +1,55 @@
+! ---------------------------------------------------------
+! DOSYA: Security_ACLs.txt
+! KONU: Erişim Kontrol Listeleri (ACL) ve Network Güvenliği
+! HEDEF CIHAZ: AnaKatSwitch (L3 Core Switch)
+! ---------------------------------------------------------
+
+! SENARYO:
+! 1. Misafirler (VLAN 30) internete çıkabilsin ama iç ağa (Personel, Server, Yönetim) erişemesin.
+! 2. Sadece Yönetim (VLAN 10) cihazlara SSH yapabilsin.
+
+! ---------------------------------------------------------
+! 1. MISAFIR IZOLASYON LISTESI (ACL_MISAFIR)
+! ---------------------------------------------------------
+ip access-list extended ACL_MISAFIR
+ ! 1. DHCP Isteğine izin ver (IP alabilmesi icin sart, yoksa internete de cikamaz)
+ permit udp any any eq bootpc
+ permit udp any any eq bootps
+ 
+ ! 2. DNS Sorgularina izin ver (Site isimlerini cozebilmesi icin)
+ permit udp any any eq domain
+ permit tcp any any eq domain
+ 
+ ! 3. KRITIK KURAL: İç Ağlara (192.168.0.0/16) Erisimi TAMAMEN KES
+ ! Bu sayede Misafir; Personel(20), Server(50) veya Yonetim(10) agina ping bile atamaz.
+ deny ip any 192.168.0.0 0.0.255.255
+ 
+ ! 4. Geri kalan her yere (Internet) izin ver
+ permit ip any any
+!
+
+! ---------------------------------------------------------
+! 2. SSH GUVENLIGI (ACL_SSH_MANAGEMENT)
+! ---------------------------------------------------------
+! Cihazların yönetim paneline (SSH) sadece IT ekibi ulaşsın.
+ip access-list standard ACL_SSH_MANAGEMENT
+ ! Sadece VLAN 10 (Yonetim) IP bloguna izin ver
+ permit 192.168.10.0 0.0.0.255
+ ! Diger herkesi reddet (Default Deny)
+ deny any
+!
+
+! ---------------------------------------------------------
+! CONFIG UYGULAMASI (Bu komutlar cihazda nereye girilir?)
+! ---------------------------------------------------------
+
+! 1. Misafir Kuralini, Misafirlerin Kapisina (VLAN 30 Interface) koyuyoruz.
+interface Vlan30
+ description --- MISAFIR AG KAPISI ---
+ ip access-group ACL_MISAFIR in
+!
+
+! 2. SSH Kuralini, Sanal Hatlara (VTY) koyuyoruz.
+line vty 0 15
+ access-class ACL_SSH_MANAGEMENT in
+!

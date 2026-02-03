@@ -1,0 +1,121 @@
+! ---------------------------------------------------------
+! HOSTNAME: AnaKatSwitch (L3 Core & VTP Server)
+! ROLLER: Inter-VLAN Routing, DHCP Relay, VTP Server
+! DURUM: AKTIF (Routing Enabled)
+! ---------------------------------------------------------
+
+version 15.0
+service password-encryption
+hostname AnaKatSwitch
+!
+! --- KRITIK KOMUT: ROUTING AKTIVASYONU ---
+! Bu komut olmadan cihaz sadece Switch gibi davranir.
+! VLAN'lar arasi gecis (Routing) icin bu SARTTIR!
+ip routing
+!
+ip domain-name otel.local
+crypto key generate rsa general-keys modulus 1024
+ip ssh version 2
+username admin privilege 15 secret cisco123
+!
+! VTP Yapilandirmasi (SERVER)
+!
+vtp domain OTEL_NETWORK
+vtp password cisco
+vtp mode server
+!
+! VLAN Veritabani (VTP ile dagitilacak)
+!
+vlan 10
+ name MGMT
+vlan 20
+ name DATA
+vlan 30
+ name GUEST
+vlan 50
+ name SERVER
+vlan 60
+ name VOICE
+vlan 99
+ name NATIVE
+!
+! 1. ETHERCHANNEL (Downlink -> SwKat0)
+!
+interface range GigabitEthernet1/0/3 - 4
+ description --- DOWNLINK LACP TO SWKAT0 ---
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk native vlan 99
+ channel-group 1 mode active
+ no shutdown
+!
+interface Port-channel 1
+ description --- MANTIKSAL HAT (Po1) ---
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 1,10,20,30,50,60,99
+ no shutdown
+!
+! 2. UPLINK BAGLANTILARI (Router Modu)
+! 'no switchport' komutu bu portlari Router portuna cevirir.
+!
+interface GigabitEthernet1/0/1
+ description --- UPLINK ROUTER 1 (Main) ---
+ no switchport
+ ip address 10.0.0.2 255.255.255.252
+ no shutdown
+!
+interface GigabitEthernet1/0/2
+ description --- UPLINK ROUTER 2 (Backup) ---
+ no switchport
+ ip address 10.0.0.6 255.255.255.252
+ no shutdown
+!
+! 3. SVI (GATEWAY) & DHCP HELPER
+! 'ip helper-address' DHCP isteklerini Server VLAN'ina (50) tasir.
+!
+interface Vlan10
+ description --- YONETIM GW ---
+ ip address 192.168.10.1 255.255.255.0
+ no shutdown
+!
+interface Vlan20
+ description --- PERSONEL GW ---
+ ip address 192.168.20.1 255.255.255.0
+ ip helper-address 192.168.50.10
+ no shutdown
+!
+interface Vlan30
+ description --- MISAFIR GW ---
+ ip address 192.168.30.1 255.255.255.0
+ ip helper-address 192.168.50.10
+ no shutdown
+!
+interface Vlan50
+ description --- SERVER GW (DHCP Sunucusu Burada) ---
+ ip address 192.168.50.1 255.255.255.0
+ ! Server ayni odada oldugu icin helper gerekmez.
+ no shutdown
+!
+interface Vlan60
+ description --- VOIP GW ---
+ ip address 192.168.60.1 255.255.255.0
+ ip helper-address 192.168.50.10
+ no shutdown
+!
+interface Vlan99
+ description --- NATIVE VLAN (Guvenlik) ---
+ no ip address
+ shutdown
+!
+! 4. ROTALAR (Routing Table)
+!
+ip route 0.0.0.0 0.0.0.0 10.0.0.1
+ip route 0.0.0.0 0.0.0.0 10.0.0.5
+!
+line vty 0 15
+ transport input ssh
+ login local
+!
+end

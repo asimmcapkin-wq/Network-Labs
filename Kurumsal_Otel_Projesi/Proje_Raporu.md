@@ -27,4 +27,4 @@ Bu proje, gerçek dünya senaryolarına uygun olarak; yüksek erişilebilirlik, 
 - **SSH Testi:** Admin PC'den switch yönetimi > **BAŞARILI**
 
 ---
-*Proje Sahibi: [Senin Adın/Github Nickin]*
+*Proje Sahibi: Asım Murat Çapkın

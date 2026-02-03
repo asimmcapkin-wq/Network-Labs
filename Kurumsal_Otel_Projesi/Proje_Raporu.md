@@ -41,7 +41,7 @@ Cihazların ilgili VLAN'larda olduğu ve IP aldıkları doğrulanmıştır.
 
 ### 3. Web/İnternet Erişim Testi
 Kullanıcıların internete (Web Sunucusuna) erişebildiği test edilmiştir.
-![Web Testi](assets/websitesie.png)
+![Web Testi](assets/websitesi.png)
 
 ### 4. ACL Güvenlik Testi (Yasaklı Erişim)
 Misafir veya yetkisiz cihazların, korunan ağlara (VLAN 20/IoT) erişimi **Engellenmiştir**.

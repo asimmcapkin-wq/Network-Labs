@@ -6,7 +6,9 @@
 
 version 15.0
 service password-encryption
-hostname SwKat_Personel
+hostname SwKat_Personel 
+!Enable modda şifreli giriş için secret ile şifre vermemiz lazım. 
+enable secret cisco123
 !
 ip domain-name otel.local
 crypto key generate rsa general-keys modulus 1024

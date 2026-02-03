@@ -46,7 +46,7 @@ Kullanıcıların internete (Web Sunucusuna) erişebildiği test edilmiştir.
 ### 4. ACL Güvenlik Testi (Yasaklı Erişim)
 Misafir veya yetkisiz cihazların, korunan ağlara (VLAN 20/IoT) erişimi **Engellenmiştir**.
 *(Kanıt: "Request timed out" veya "Destination host unreachable")*
-![ACL Engelleme](assets/vlan20iotyasak.png)
+![ACL Engelleme](assets/acl_block_test.png)
 
 ### 5. Yönlendirme Testi (Traceroute)
 Paketlerin doğru rotayı izleyerek hedefe ulaştığını gösteren yol haritası.

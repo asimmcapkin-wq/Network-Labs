@@ -1,0 +1,96 @@
+! ---------------------------------------------------------
+! HOSTNAME: SwKat[X] (Kenar Switch - VTP Client)
+! MODEL: PT-Empty (Modüler Portlar: G0/1, G1/1 vb.)
+! FEATURE: EtherChannel Uplink + Port Security + STP Portfast
+! ---------------------------------------------------------
+
+version 15.0
+service password-encryption
+hostname SwKat_Personel
+!
+ip domain-name otel.local
+crypto key generate rsa general-keys modulus 1024
+ip ssh version 2
+username admin privilege 15 secret cisco123
+!
+! VTP Yapilandirmasi (CLIENT)
+!
+vtp domain OTEL_NETWORK
+vtp password cisco
+vtp mode client
+!
+! STP AYARLARI (KISALTMA)
+! Uç cihazlarda STP bekleme suresini iptal eder.
+! BPDU Guard: Portfast aktif porttan switch baglanirsa kapatir.
+!
+spanning-tree portfast default
+spanning-tree portfast bpduguard default
+!
+! 1. UPLINK (YUKARI YON) - ETHERCHANNEL
+! Core Switch veya bir onceki Switch ile baglanti.
+! Ornek: G0/1 ve G1/1 kullanilmis.
+!
+interface range GigabitEthernet0/1 , GigabitEthernet1/1
+ description --- UPLINK ETHERCHANNEL ---
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk native vlan 99
+ channel-group 1 mode active
+ no shutdown
+!
+interface Port-channel 1
+ description --- UPLINK PO1 ---
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 1,10,20,30,50,60,99
+ no shutdown
+!
+! 2. DOWNLINK (ZINCIRLEME BAGLANTI VARSA)
+! Eger bu switchten baska switch'e gidiliyorsa (SwKat0 -> SwKat1)
+!
+interface range GigabitEthernet2/1 , GigabitEthernet3/1
+ description --- DOWNLINK TO NEXT SWITCH ---
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk native vlan 99
+ ! Diger switch icin farkli grup no verilmeli (Orn: 2)
+ channel-group 2 mode active
+ no shutdown
+!
+! 3. PERSONEL VE TELEFON PORTLARI (GUVENLIKLI)
+! Ozellikler: VLAN 20 (PC) + VLAN 60 (Voice) + Port Security + Portfast
+!
+interface range GigabitEthernet4/1 , GigabitEthernet5/1
+ description --- PERSONEL PC & IP PHONE ---
+ switchport mode access
+ switchport access vlan 20
+ switchport voice vlan 60
+ !
+ ! STP Portfast (Kısaltma)
+ spanning-tree portfast
+ !
+ ! Port Security (Guvenlik)
+ switchport port-security
+ ! Max 2 MAC Adresi (1 PC + 1 Telefon icin)
+ switchport port-security maximum 2
+ ! MAC Adresini hafizaya kaydet (Sticky)
+ switchport port-security mac-address sticky
+ ! Ihlal durumunda portu kapat veya uyari ver (Restrict/Shutdown)
+ switchport port-security violation restrict
+ no shutdown
+!
+! 4. YONETIM IP (SVI)
+!
+interface Vlan10
+ description --- YONETIM ---
+ ip address 192.168.10.X 255.255.255.0
+ no shutdown
+!
+ip default-gateway 192.168.10.1
+!
+line vty 0 15
+ transport input ssh
+ login local
+!
+end

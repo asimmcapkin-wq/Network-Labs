@@ -4,28 +4,29 @@ Bu proje, gerçek dünya senaryolarına uygun olarak; yüksek erişilebilirlik, 
 
 ## 🛠️ Uygulanan Teknolojiler ve Yapılandırmalar
 
-### 1. Layer 2 Güvenlik (Switch Hardening)
-- **Port Security:** Odalardaki portlara yetkisiz cihaz (Rogue Device) takılmasını önlemek için MAC adresi sabitleme (Sticky MAC) ve ihlal durumunda kapatma (Shutdown) politikaları uygulandı.
-- **Protected Ports (PVLAN Edge):** Misafir odaları (VLAN 20) arasında L2 izolasyon sağlandı. Misafirler birbirini göremez, sadece Gateway'e gidebilir.
-- **DHCP Snooping & ARP Inspection:** (Opsiyonel: İleride eklenecek notu)
+## 🛠️ Uygulanan Teknolojiler ve Ağ Mimarisi
 
-### 2. Layer 3 Yedeklilik (Redundancy)
-- **ECMP (Equal Cost Multi-Path):** Edge Router ile Core Switch arasında çift fiziksel hat kullanıldı.
-- **Routing:** Statik yönlendirme ile yük dengeleme (Load Balancing) yapılarak tek hattın kopması durumunda kesintisiz erişim sağlandı.
+Bu projede kurumsal ölçekli bir ağda olması gereken yedeklilik, performans ve güvenlik protokolleri eksiksiz uygulanmıştır.
 
-### 3. WAN & İnternet Erişimi
-- **NAT/PAT (Network Address Translation):** İç ağdaki (192.168.x.x) tüm kullanıcıların, tek bir Public IP üzerinden ISP'ye çıkışı sağlandı.
-- **ISP Bağlantısı:** Telekom Router'ı ve Google DNS (8.8.8.8) simülasyonu ile uçtan uca internet erişimi test edildi ve doğrulandı.
+### 1. Layer 2 Anahtarlama ve VLAN Yönetimi
+- **VTP (VLAN Trunking Protocol):** VLAN veritabanı yönetimi merkezi hale getirildi. Core Switch **"Server"**, Kenar Switchler **"Client"** modunda yapılandırılarak VLAN tutarlılığı sağlandı.
+- **EtherChannel (LACP):** Switchler arasındaki bağlantılar birleştirilerek (Link Aggregation) bant genişliği artırıldı ve fiziksel kablo yedekliliği sağlandı.
+- **STP (Spanning Tree Protocol):** Kenar portlarda **PortFast** ve **BPDUGuard** aktif edilerek, PC ve IP Telefonların ağa anında katılması sağlandı ve döngü (loop) oluşumu engellendi.
 
-### 4. Yönetim (Management)
-- **SSHv2:** Tüm cihazlarda (Router ve Switchler) Telnet kapatıldı, RSA 1024-bit şifrelemeli SSH erişimi aktif edildi.
-- **VLAN Segmentation:** Yönetim trafiği (VLAN 10) ile kullanıcı trafiği tamamen izole edildi.
+### 2. DHCP ve IP Adres Yönetimi
+- **Merkezi DHCP Sunucusu:** Tüm IP dağıtımı, Server VLAN'ında (VLAN 50) bulunan merkezi sunucu üzerinden yönetilmektedir.
+- **DHCP Relay (IP Helper):** Farklı VLAN'lardaki (Personel, Misafir, VoIP) cihazların IP alabilmesi için Core Switch üzerinde `ip helper-address` komutu ile DHCP yönlendirmesi (Relay Agent) yapılmıştır.
 
-## 🧪 Test Sonuçları
-- **Ping Testi:** Misafir VLAN'ından 8.8.8.8 erişimi > **BAŞARILI**
-- **Failover Testi:** Router'ın bir kablosu koptuğunda ping kesintisi > **YOK (BAŞARILI)**
-- **SSH Testi:** Admin PC'den switch yönetimi > **BAŞARILI**
+### 3. Ağ Güvenliği (Security & ACL)
+- **ACL (Erişim Kontrol Listeleri):** - **Misafir İzolasyonu:** Misafirlerin (VLAN 30) iç ağa (Personel/Server) erişimi engellendi, sadece internete çıkış izni verildi.
+  - **Yönetim Güvenliği:** Switch ve Router yönetim panellerine (SSH) sadece IT Yönetim VLAN'ından (VLAN 10) erişim izni tanımlandı.
+- **Port Security:** Yetkisiz erişimleri önlemek için portlarda **Sticky MAC** ve **Max: 2 Device** (PC+Telefon) kuralı uygulandı. İhlal durumunda port kendini kısıtlar (Restrict).
+- **Protected Ports (PVLAN Edge):** Misafir odaları arasında L2 izolasyon sağlandı; misafirler birbirini göremez, sadece Gateway'e gidebilir.
 
+### 4. Layer 3 Yönlendirme ve WAN
+- **Inter-VLAN Routing:** VLAN'lar arası geçişler Core Switch üzerinde (SVI) yapılandırıldı.
+- **Redundancy (Yedeklilik):** Edge Router ile Core Switch arasında çift hat üzerinden yük dengeleme (ECMP) kurgulandı.
+- **NAT/PAT:** İç ağ kullanıcılarının tek bir Public IP üzerinden internete çıkışı (Overload) sağlandı.
 
 ## 📸 Test ve Doğrulama Kanıtları (Screenshots)
 
@@ -37,7 +38,7 @@ Kurulan ağın genel yapısı, VLAN dağılımı ve yedekli hatlar.
 
 ### 2. VLAN ve IP Yapılandırması
 Cihazların ilgili VLAN'larda olduğu ve IP aldıkları doğrulanmıştır.
-![VLAN Kanıtı](assets/vlankanıt.png)
+![VLAN Kanıtı](assets/vlanotel.png)
 
 ### 3. Web/İnternet Erişim Testi
 Kullanıcıların internete (Web Sunucusuna) erişebildiği test edilmiştir.
@@ -55,6 +56,12 @@ Paketlerin doğru rotayı izleyerek hedefe ulaştığını gösteren yol haritas
 ### 6. Uzaktan Yönetim (SSH)
 Yönetim cihazlarına sadece yetkili VLAN'dan güvenli (SSH) erişim sağlanmaktadır.
 ![SSH Erişimi](assets/ssh_erisimi.png)
+
+
+### 6. DHCP
+It dışındaki ağların dhcp serverdan ip alması sağlandı.
+![SSH Erişimi](assets/dhcp_kaniti.png)
+
 
 ---
 *Proje Sahibi: Asım Murat Çapkın

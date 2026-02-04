@@ -2,8 +2,6 @@
 
 Bu proje, gerçek dünya senaryolarına uygun olarak; yüksek erişilebilirlik, güvenlik ve uzaktan yönetim standartlarında tasarlanmış bir otel ağı simülasyonudur.
 
-## 🛠️ Uygulanan Teknolojiler ve Yapılandırmalar
-
 ## 🛠️ Uygulanan Teknolojiler ve Ağ Mimarisi
 
 Bu projede kurumsal ölçekli bir ağda olması gereken yedeklilik, performans ve güvenlik protokolleri eksiksiz uygulanmıştır.

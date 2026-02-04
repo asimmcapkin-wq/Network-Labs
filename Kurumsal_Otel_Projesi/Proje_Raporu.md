@@ -36,7 +36,7 @@ Kurulan ağın genel yapısı, VLAN dağılımı ve yedekli hatlar.
 
 ### 2. VLAN ve IP Yapılandırması
 Cihazların ilgili VLAN'larda olduğu ve IP aldıkları doğrulanmıştır.
-![VLAN Kanıtı](assets/vlanotel.png)
+![VLAN Kanıtı](assets/VlanOtel.png)
 
 ### 3. Web/İnternet Erişim Testi
 Kullanıcıların internete (Web Sunucusuna) erişebildiği test edilmiştir.

@@ -33,7 +33,7 @@ Ağın beklenen şekilde çalıştığı, güvenlik kurallarının (ACL) aktif o
 
 ### 1. Ağ Topolojisi (Genel Bakış)
 Kurulan ağın genel yapısı, VLAN dağılımı ve yedekli hatlar.
-![Topoloji](assets/TOPOLOJIYENI.png)
+![Topoloji](assets/OtelTOpoloji.png)
 
 ### 2. VLAN ve IP Yapılandırması
 Cihazların ilgili VLAN'larda olduğu ve IP aldıkları doğrulanmıştır.

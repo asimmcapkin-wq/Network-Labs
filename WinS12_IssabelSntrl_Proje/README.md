@@ -25,17 +25,25 @@ Proje, **VeliogluSigorta** kurgusal şirketi için tasarlanmış hibrit bir yap�
 ## 🎯 Proje Hedefleri ve Başarımlar
 
 1.  **Repo ve Paket Yönetimi Onarımı:**
+   
     * Issabel 4 (CentOS 7) üzerindeki eski repoların `vault.centos.org` adresine yönlendirilerek paket yükleme sorununun çözülmesi.
+      
 2.  **Ağ Erişim Sorunlarının Giderilmesi:**
+   
     * NAT ve Routing engellerinin **SSH Tünelleme** ve **Jump Server (Switch üzerinden sıçrama)** teknikleriyle aşılması.
+      
 3.  **Dosya Sunucusu ve Yetkilendirme (File Server & NTFS Security)**
+   
 Kullanıcıların departmanlarına göre dosya erişim yetkileri sınırlandırıldı ve güvenlik testleri yapıldı.
+
 * **Kullanıcı Senaryosu:** Active Directory üzerinde `Ahmet` (IT Admin) ve `Mehmet` (Standart Kullanıcı) hesapları oluşturuldu.
 * **Erişim Testi (Access Denied):**
     * `Mehmet` kullanıcısının, sadece IT yöneticilerine açık olan **"\\VeliogluServer\IT_Ozel"** klasörüne girmeye çalıştığında **Erişim Engellendi (Access Denied)** hatası aldığı doğrulandı.
     * Her iki kullanıcının da **"Ortak_Alan"** klasöründe dosya paylaşabildiği test edildi.
 * **Sonuç:** Kullanıcılar sadece kendi yetki seviyelerindeki verilere ulaşabilmektedir.
+  
 4. **Linux ve VoIP Entegrasyonu (Issabel & Extensions)**
+   
 Issabel santral sunucusu kurularak şirket içi dahili görüşme altyapısı hazırlandı ve kullanıcı testleri tamamlandı.
 * **Dahili Hatlar (Extensions):**
     * **Ahmet:** 101 Nolu Dahili
@@ -123,3 +131,11 @@ Web arayüzü entegrasyonu için gereken modül repolardan kalktığı için Hib
 
 sed -i 's|#baseurl=[http://mirror.centos.org](http://mirror.centos.org)|baseurl=[http://vault.centos.org](http://vault.centos.org)|g' /etc/yum.repos.d/CentOS-*
 yum clean all && yum makecache
+
+## 1. 🐧 Linux Repo Onarımı 
+## 2. 🔐 Active Directory SSH Girişi 
+## 3. 👥Active Directory Kullanıcıları (Windows Server)
+## 4.  Dosya İzinleri / Erişim Engellendi Hatası (Client PC)
+## 5. 📞 Telefon Görüşmesi (Softphone)
+
+

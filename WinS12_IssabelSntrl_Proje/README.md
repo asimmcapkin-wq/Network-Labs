@@ -1,4 +1,3 @@
-<img width="1112" height="223" alt="image" src="https://github.com/user-attachments/assets/9f608fa9-886b-426f-a40b-e1d624ebf5f4" /># Windows Server ve Issabel Entegrasyon Projesi
 # 🏢 Kurumsal VoIP ve Active Directory Entegrasyon Projesi (Hibrit Lab)
 
 Bu proje, **Windows Server 2019 (Active Directory)** ve **Issabel 4 (Linux tabanlı IP Santral)** sunucularının **EVE-NG** üzerinde simüle edilen kurumsal bir ağ topolojisinde entegrasyonunu kapsar.
@@ -132,10 +131,78 @@ Web arayüzü entegrasyonu için gereken modül repolardan kalktığı için Hib
 sed -i 's|#baseurl=[http://mirror.centos.org](http://mirror.centos.org)|baseurl=[http://vault.centos.org](http://vault.centos.org)|g' /etc/yum.repos.d/CentOS-*
 yum clean all && yum makecache
 
-## 1. 🐧 Linux Repo Onarımı 
-## 2. 🔐 Active Directory SSH Girişi 
-## 3. 👥Active Directory Kullanıcıları (Windows Server)
-## 4.  Dosya İzinleri / Erişim Engellendi Hatası (Client PC)
-## 5. 📞 Telefon Görüşmesi (Softphone)
+# 🏢 Kurumsal Hibrit Ağ ve Sistem Yönetimi Projesi
+
+Bu proje, **Windows Server 2019 (Active Directory)**, **Issabel 4 (VoIP)** ve **Cisco Ağ Cihazları** kullanılarak oluşturulmuş uçtan uca bir kurumsal ağ simülasyonudur.
+
+Proje; ağ altyapısının kurulmasından (NAT/Routing), Active Directory kullanıcı yönetimine, Dosya Sunucusu güvenliğinden Linux tabanlı santral entegrasyonuna kadar tüm süreçleri kapsar.
+
+---
+
+## 🏗️ 1. Ağ Altyapısı ve Topoloji (Cisco & EVE-NG)
+
+Sanal laboratuvar ortamının dış dünya (İnternet) ile konuşabilmesi için **EVE-NG Cloud Bridging** ve **Cisco NAT** teknikleri kullanıldı.
+
+* **DHCP Sunucusu:** IP dağıtımı Windows Server üzerinde yapılandırıldı.
+* **NAT Çözümü:** EVE-NG sanal ağındaki trafiğin fiziksel ağa çıkabilmesi için Router WAN bacağına statik IP (`.129`) atandı ve IP Masquerading uygulandı.
+
+**📸 DHCP Konfigürasyonu:**
+![DHCP Server](assets/DhcpServer.png)
+
+---
+
+## 👥 2. Active Directory ve Kullanıcı Yönetimi
+
+Şirket departmanlarına uygun olarak **Organizational Unit (OU)** yapısı oluşturuldu ve kullanıcılar tanımlandı.
+
+* **Ahmet Ciger:** IT Yöneticisi (Admin yetkilerine sahip).
+* **Mehmet Ciger:** Standart Kullanıcı (Kısıtlı yetkiler).
+
+**📸 Active Directory Kullanıcıları:**
+| Ahmet Ciger (IT Admin) | Mehmet Ciger (User) |
+| :---: | :---: |
+| ![Ahmet User](AhmetCigerKullanıcı.png) | ![Mehmet User](assets/MehmetCigerKullanıcı.png) |
+
+---
+
+## 🔐 3. Dosya Sunucusu ve NTFS İzinleri (File Server Security)
+
+Departmanlar arası veri güvenliğini sağlamak amacıyla dosya paylaşım izinleri yapılandırıldı.
+
+* **Senaryo:** `IT_Ozel` klasörüne sadece IT personeli erişebilir.
+* **Test:** Standart kullanıcı (Mehmet), IT klasörüne girmeye çalıştığında **"Erişim Engellendi"** hatası almalıdır. Yetkili kullanıcı (Ahmet) ise kendi klasörlerine sorunsuz erişebilmelidir.
+
+**📸 Erişim Testi Kanıtları:**
+* **Yetkili Erişim (Ahmet - Satış Klasörü):** Başarılı Erişim.
+    ![Satış Erişim](assets/AhmetCigerSatısErisim.png)
+    
+* **Yetkisiz Erişim Denemesi (Access Denied):**
+    ![Erişim Engeli](assets/AhmetCigerErişimENgeli.png)
+
+**📸 Repo Onarımı:**
+![Repo Fix](assets/RepoYükleme.png)
+
+### 🔑 SSH Üzerinden Active Directory Girişi
+Issabel sunucusu `realm` ve `sssd` servisleri ile domain'e alındı. Windows tarafındaki `cigerahmet` kullanıcısı, Linux sunucuya **kendi Windows şifresiyle** SSH bağlantısı gerçekleştirdi.
+
+**📸 SSH Bağlantı Kanıtı:**
+![SSH Erişimi](assets/AhmetCigerSSHERIŞIMI.png)
+
+---
+
+## 📞 VoIP Santral Testi (Dahili Görüşme)
+
+Softphone uygulamaları (Zoiper/MicroSIP) kullanılarak dahili hatlar test edildi. Ahmet ve Mehmet kullanıcıları ağ üzerinden birbirleriyle sesli görüşme sağladı.
+
+**📸 Karşılıklı Arama Testi:**
+![VoIP Call](assets/AramaKarşılıklı.png)
+
+---
+
+## 📝 Kullanılan Teknolojiler
+* **Hypervisor:** EVE-NG
+* **OS:** Windows Server 2019, Issabel 4 (CentOS 7), Windows 10
+* **Network:** Cisco Router & L3 Switch
+* **Protocols:** SIP, Kerberos, LDAP, SMB, DHCP, NAT/PAT
 
 

@@ -161,7 +161,7 @@ Sanal laboratuvar ortamının dış dünya (İnternet) ile konuşabilmesi için 
 **📸 Active Directory Kullanıcıları:**
 | Ahmet Ciger (User) | Mehmet Ciger (User) |
 | :---: | :---: |
-| ![Ahmet User](AhmetCigerKullanıcı.png) | ![Mehmet User](assets/MehmetCigerKullanıcı.png) |
+| ![Ahmet User](assets/AhmetCigerKullanıcı.png) | ![Mehmet User](assets/MehmetCigerKullanıcı.png) |
 
 ---
 

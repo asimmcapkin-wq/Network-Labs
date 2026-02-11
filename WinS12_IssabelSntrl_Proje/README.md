@@ -16,7 +16,7 @@ Proje, **VeliogluSigorta** kurgusal şirketi için tasarlanmış hibrit bir yap�
     * **VLAN 10,20 ve 50 (Clients):** Yönetim PC'leri, IP Telefonlar
 * **Yönlendirme (Routing):** Cisco Router ve L3 Core Switch üzerinden Inter-VLAN routing ve NAT.
 
-![Ağ Topolojisi](image_2b1d03.png)
+![Ağ Topolojisi](assets/Topoloji.png)
 *(EVE-NG üzerindeki Lab topolojisi: Windows Server, Issabel ve Client makinelerin dağılımı)*
 
 ---
@@ -155,11 +155,11 @@ Sanal laboratuvar ortamının dış dünya (İnternet) ile konuşabilmesi için 
 
 Şirket departmanlarına uygun olarak **Organizational Unit (OU)** yapısı oluşturuldu ve kullanıcılar tanımlandı.
 
-* **Ahmet Ciger:** IT Yöneticisi (Admin yetkilerine sahip).
-* **Mehmet Ciger:** Standart Kullanıcı (Kısıtlı yetkiler).
+* **Ahmet Ciger:** Standart Kullanıcı/Satıs.
+* **Mehmet Ciger:** Standart Kullanıcı/Kaza.
 
 **📸 Active Directory Kullanıcıları:**
-| Ahmet Ciger (IT Admin) | Mehmet Ciger (User) |
+| Ahmet Ciger (User) | Mehmet Ciger (User) |
 | :---: | :---: |
 | ![Ahmet User](AhmetCigerKullanıcı.png) | ![Mehmet User](assets/MehmetCigerKullanıcı.png) |
 

@@ -42,3 +42,18 @@ Maslak Şube uç nokta Linux makinesinde Gateway'e erişimde alınan Destination
 MaslakSube (FortiGate) cihazının port2 arayüzüne IP tanımlaması yapıldı, allowaccess ping özelliği aktif edildi.
 
 Uç cihaz ile Firewall arasına konumlandırılan Cisco switchlerin (SubeSW, L2Sw4) varsayılan olarak kapalı gelen arayüzleri aktif (no shutdown) edilerek fiziksel katman iletişimi sağlandı.
+
+## 8. Laboratuvar Doğrulama ve Test Kanıtları
+Projede uygulanan yapılandırmaların çalıştığını doğrulayan sistem çıktıları, arayüz görüntüleri ve topoloji durumları depo içerisine eklenmiştir:
+
+OSPF Yönlendirme ve Komşuluk Durumları (Ospf.png, Ispnei.png): Cisco ve Fortinet cihazları arasındaki MTU uyuşmazlığının çözüldüğünü, OSPF komşuluklarının "FULL" state seviyesine ulaştığını ve rotaların yönlendirme tablolarına başarıyla işlendiğini gösteren CLI ve GUI çıktılarıdır.
+
+Bölge (Zone) ve VLAN Segmentasyonu (Zone.png): CoreFW üzerinde ağ trafiğini izole etmek amacıyla yapılandırılan DmzZone, GuestZone ve TrustedZone mantıksal ayrımlarının arayüz kanıtıdır.
+
+Kimlik Tabanlı Erişim Kontrolü (LLDAP.png): FortiGate'in yerel Active Directory (LocalAD) entegrasyonu ile FgtMudurler ve FgtPersoneller gruplarını sisteme başarılı bir şekilde çektiğini gösteren kayıt ekranıdır.
+
+Güvenlik Politikaları ve Kurallar (MerkezSwPolicy.png): İç ağlardan internete, güvenilir ağlardan DMZ bölgesine olan trafik akışlarını LDAP grupları bazında denetleyen erişim politikalarının listesidir.
+
+DMZ ve Virtual IP (NAT) Entegrasyonu (VirtualIP.png, VirtualIp10.0.0.1.png, VirtualIp8080port.png): WAN üzerinden gelen isteklerin 80 ve 8080 portları kullanılarak DMZ bölgesindeki 192.168.80.10 ve 192.168.90.10 sunucularına port yönlendirme (Port Forwarding) işlemiyle ulaştırıldığını kanıtlayan ekran görüntüleridir (80.10.png ve 90.10.png dosyalarıyla desteklenmiştir).
+
+Genel Ağ Mimarisi (NetworkFace.png): Laboratuvarın uçtan uca topolojik tasarımını ve cihazlar arası fiziksel/mantıksal bağlantı şemasını gösterir.

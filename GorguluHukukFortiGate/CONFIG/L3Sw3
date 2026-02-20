@@ -1,0 +1,22 @@
+configure terminal
+hostname L2Sw
+
+! VLAN Tanımlaması
+vlan 10
+ name It_Vlan
+exit
+
+! CoreSW'ye Giden Uplink Portu (Trunk)
+interface Ethernet0/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+exit
+
+! Kullanıcı (PC) Portları (Access)
+interface range Ethernet0/1 - 2 
+ switchport mode access
+ switchport access vlan 10
+exit
+
+end
+write memory

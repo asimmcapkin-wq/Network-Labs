@@ -1,4 +1,4 @@
-1. EVE-NG Altyapı ve İstemci Hazırlığı
+# 1.EVE-NG Altyapı ve İstemci Hazırlığı
 EVE-NG web arayüzünde GUI kaynaklı yaşanan "undefined" ve senkronizasyon hataları analiz edildi.
 
 Performansı ve stabiliteyi artırmak amacıyla Kubuntu Linux üzerine komut satırı üzerinden Microsoft Edge kurulumu yapıldı ve laboratuvar erişimi bu tarayıcıya taşındı.

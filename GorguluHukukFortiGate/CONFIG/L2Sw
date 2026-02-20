@@ -1,0 +1,22 @@
+configure terminal
+hostname L2Sw
+
+! VLAN Tanımlaması
+vlan 60
+ name Ceza_Vlan
+exit
+
+! CoreSW'ye Giden Uplink Portu (Trunk)
+interface Ethernet0/3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+exit
+
+! Kullanıcı (PC) Portları (Access)
+interface range Ethernet0/0 - 2 , Ethernet1/0 - 3 , Ethernet2/0
+ switchport mode access
+ switchport access vlan 60
+exit
+
+end
+write memory

@@ -48,29 +48,29 @@ Projede uygulanan yapılandırmaların çalıştığını doğrulayan sistem ç�
 
 * **OSPF Yönlendirme ve Komşuluk Durumları:** Cisco ve Fortinet cihazları arasındaki MTU uyuşmazlığının çözüldüğünü, OSPF komşuluklarının "FULL" state seviyesine ulaştığını ve rotaların yönlendirme tablolarına başarıyla işlendiğini gösteren CLI ve GUI çıktılarıdır.
   
-  ![OSPF GUI Çıktısı](assets/Ospf.png)
-  ![OSPF CLI Komşuluk](assets/Ispnei.png)
+  ![OSPF GUI Çıktısı](Assets/Ospf.png)
+  ![OSPF CLI Komşuluk](Assets/Ispnei.png)
 
 * **Bölge (Zone) ve VLAN Segmentasyonu:** CoreFW üzerinde ağ trafiğini izole etmek amacıyla yapılandırılan `DmzZone`, `GuestZone` ve `TrustedZone` mantıksal ayrımlarının arayüz kanıtıdır.
   
-  ![Zone Segmentasyonu](assets/Zone.png)
+  ![Zone Segmentasyonu](Assets/Zone.png)
 
 * **Kimlik Tabanlı Erişim Kontrolü:** FortiGate'in yerel Active Directory (LocalAD) entegrasyonu ile `FgtMudurler` ve `FgtPersoneller` gruplarını sisteme başarılı bir şekilde çektiğini gösteren kayıt ekranıdır.
   
-  ![LDAP Kullanıcı Grupları](assets/LLDAP.png)
+  ![LDAP Kullanıcı Grupları](Assets/LLDAP.png)
 
 * **Güvenlik Politikaları ve Kurallar:** İç ağlardan internete, güvenilir ağlardan DMZ bölgesine olan trafik akışlarını LDAP grupları bazında denetleyen erişim politikalarının listesidir.
   
-  ![Güvenlik Duvarı Kuralları](assets/MerkezSwPolicy.png)
+  ![Güvenlik Duvarı Kuralları](Assets/MerkezSwPolicy.png)
 
 * **DMZ ve Virtual IP (NAT) Entegrasyonu:** WAN üzerinden gelen isteklerin 80 ve 8080 portları kullanılarak DMZ bölgesindeki `192.168.80.10` ve `192.168.90.10` sunucularına port yönlendirme (Port Forwarding) işlemiyle ulaştırıldığını kanıtlayan ekran görüntüleridir.
   
-  ![Virtual IP Kuralları](assets/VirtualIP.png)
-  ![10.0.0.1 VIP Durumu](assets/VirtualIp10.0.0.1.png)
-  ![8080 Port VIP Durumu](assets/VirtualIp8080port.png)
-  ![Web Sunucu 80.10](assets/80.10.png)
-  ![Uygulama Sunucu 90.10](assets/90.10.png)
+  ![Virtual IP Kuralları](Assets/VirtualIP.png)
+  ![10.0.0.1 VIP Durumu](Assets/VirtualIp10.0.0.1.png)
+  ![8080 Port VIP Durumu](Assets/VirtualIp8080port.png)
+  ![Web Sunucu 80.10](Assets/80.10.png)
+  ![Uygulama Sunucu 90.10](Assets/90.10.png)
 
 * **Genel Ağ Mimarisi:** Laboratuvarın uçtan uca topolojik tasarımını ve cihazlar arası fiziksel/mantıksal bağlantı şemasını gösterir.
   
-  ![Uçtan Uca Ağ Topolojisi](assets/NetworkFace.png)
+  ![Uçtan Uca Ağ Topolojisi](Assets/NetworkFace.png)

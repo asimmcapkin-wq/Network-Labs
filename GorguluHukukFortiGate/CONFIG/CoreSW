@@ -1,0 +1,53 @@
+configure terminal
+hostname CoreSwitch
+
+! VLAN Tanımlamaları
+vlan 20
+ name Lobi_Vlan
+vlan 40
+ name Yonetim_Vlan
+vlan 50
+ name Idare_Vlan
+vlan 60
+ name Ceza_Vlan
+vlan 70
+ name Guest_Vlan
+exit
+
+! Access (Erişim) Portları Yapılandırması
+interface Ethernet1/0
+ switchport mode access
+ switchport access vlan 20
+exit
+
+interface range Ethernet1/1 - 2
+ switchport mode access
+ switchport access vlan 70
+exit
+
+! Port-Channel (LACP) ve Trunk Yapılandırması
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+exit
+
+! Port-Channel Üyesi Fiziksel Portlar (Topolojide e0/0 ve e0/1 FortiGate'e gidiyor)
+interface range Ethernet0/0 - 1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode on
+exit
+
+! Diğer Trunk Portları
+interface Ethernet0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+exit
+
+interface Ethernet1/3
+ switchport trunk encapsulation dot1q
+ switchport mode dynamic auto
+exit
+
+end
+write memory
